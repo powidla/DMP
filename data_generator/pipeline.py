@@ -46,16 +46,16 @@ class Pipeline:
         self.feature_names = list(X.columns)
         self.scale_features = scale_features
         
-        print(f"  ✅ Dataset: {X.shape[0]} samples × {X.shape[1]} features")
-        print(f"  📊 Target classes: {sorted(y.unique())}")
-        print(f"  📈 Class distribution:\n{y.value_counts()}")
+        print(f"Dataset: {X.shape[0]} samples × {X.shape[1]} features")
+        print(f"Target classes: {sorted(y.unique())}")
+        print(f"Class distribution:\n{y.value_counts()}")
         
         return X, y
     
     def create_splits(self, X, y, test_size=0.2, val_size=0.15):
         """Create train/validation/test splits"""
         
-        print(f"\n📊 Creating splits...")
+        print(f"\n Creating splits...")
         
         # Split into train/temp and test
         X_temp, X_test, y_temp, y_test = train_test_split(
@@ -70,7 +70,7 @@ class Pipeline:
         
         # Scale features if requested
         if self.scale_features:
-            print(f"  🔧 Scaling features...")
+            print(f"Scaling features...")
             X_train = pd.DataFrame(
                 self.scaler.fit_transform(X_train), 
                 columns=X_train.columns, 
@@ -160,12 +160,12 @@ class Pipeline:
                 'shap_importance': shap_importance
             }).sort_values('shap_importance', ascending=False)
             
-            print(f"  🔝 Top 10 Important Features:")
+            print(f"Top 10 Important Features:")
             for i, row in feature_importance.head(10).iterrows():
                 print(f"    {row['feature']}: {row['shap_importance']:.4f}")
         
         except Exception as e:
-            print(f"  ⚠️  SHAP analysis failed: {e}")
+            print(f"SHAP analysis failed: {e}")
             shap_values = None
             feature_importance = None
         
@@ -207,16 +207,16 @@ class Pipeline:
             os.path.join(output_dir, f"confusion_matrix_{timestamp}.csv")
         )
         
-        print(f"  💾 Results saved to: {output_dir}")
+        print(f"Results saved to: {output_dir}")
     
     def plot_shap_summary(self, X_test, max_display=20, save_plot=True, output_dir="./ml_results"):
         """Create SHAP summary plots"""
         
         if self.shap_explainer is None:
-            print("⚠️  No SHAP explainer. Run evaluate_model() first.")
+            print("No SHAP explainer. Run evaluate_model() first.")
             return
         
-        print(f"\n📈 Creating SHAP plots...")
+        print(f"\nCreating SHAP plots...")
         
         try:
             shap_values = self.shap_explainer.shap_values(X_test)
@@ -247,7 +247,7 @@ class Pipeline:
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 plot_path = os.path.join(output_dir, f"shap_summary_{timestamp}.png")
                 plt.savefig(plot_path, dpi=300, bbox_inches='tight')
-                print(f"  💾 SHAP plots saved: {plot_path}")
+                print(f"SHAP plots saved: {plot_path}")
             
             plt.show()
             
@@ -280,9 +280,6 @@ def run_full_pipeline(X, y, scale_features=True, save_results=True, output_dir="
     
     Returns: Dictionary with results
     """
-    
-    print("🚀 RUNNING FULL ML PIPELINE")
-    print("=" * 50)
     
     # Initialize pipeline
     pipeline = Pipeline()
