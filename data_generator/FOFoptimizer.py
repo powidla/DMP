@@ -10,7 +10,7 @@ import warnings
 
 class MetabolicOptimizer:
     '''
-    Flexible metabolic optimization with multiple methods:
+    Friend or Foe generator supports flexible metabolic optimization with multiple methods:
     - FBA: Standard Flux Balance Analysis (linear programming)
     - MOMA: Minimization of Metabolic Adjustment (quadratic programming)
     - pFBA: Parsimonious FBA (minimizes total flux)
