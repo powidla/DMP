@@ -53,7 +53,9 @@ class Pipeline:
         return X, y
     
     def create_splits(self, X, y, test_size=0.2, val_size=0.15):
-        """Create train/validation/test splits"""
+        """
+        Create train/validation/test splits
+        """
         
         print(f"\n Creating splits...")
         
@@ -93,7 +95,9 @@ class Pipeline:
     
     def train_model(self, X_train, y_train, X_val, y_val, 
                    max_depth=15, min_samples_split=20, min_samples_leaf=10):
-        """Train Decision Tree classifier"""
+        """
+        Train Decision Tree classifier
+        """
         
         print(f"\n Training Decision Tree...")
         
@@ -181,7 +185,9 @@ class Pipeline:
         }
     
     def _save_results(self, y_test, y_pred, feature_importance, output_dir):
-        """Save evaluation results to files"""
+        """
+        Save evaluation results to files
+        """
         
         os.makedirs(output_dir, exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -210,7 +216,9 @@ class Pipeline:
         print(f"Results saved to: {output_dir}")
     
     def plot_shap_summary(self, X_test, max_display=20, save_plot=True, output_dir="./ml_results"):
-        """Create SHAP summary plots"""
+        """
+        Create SHAP summary plots
+        """
         
         if self.shap_explainer is None:
             print("No SHAP explainer. Run evaluate_model() first.")
@@ -255,7 +263,9 @@ class Pipeline:
             print(f"Error creating plots: {e}")
     
     def get_feature_importance(self):
-        """Get scikit-learn feature importance"""
+        """
+        Get scikit-learn feature importance
+        """
         
         if self.model is None:
             raise ValueError("No model trained.")
