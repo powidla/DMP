@@ -2,7 +2,6 @@ from running import run_generate_envs_for_a_pair, optimization_fba
 from loading import load_model_simple
 from modeling import generate_random_environment
 from interactions import search_specific_interactions
-# from pipeline import analyze_data_type
 
 import argparse
 
@@ -56,12 +55,7 @@ def main():
     #     max_attempts=15000,
     #     optimization_method='MOMA'
     # )
-    # analyze_data_type(
-    #     data_dir="./results",
-    #     data_type='compounds',
-    #     target_interactions=["Cooperative", "Competitive"],
-    #     output_dir="./ml_compounds"
-    # )
+
     
 if __name__ == "__main__":
     main()
