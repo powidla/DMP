@@ -12,10 +12,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 class Pipeline:
-    """
-    Lightweight ML pipeline for classification
-    Decision Trees with interpretability
-    """
     
     def __init__(self, random_state=42):
         self.random_state = random_state
@@ -25,14 +21,6 @@ class Pipeline:
         self.shap_explainer = None
         
     def load_data(self, X, y, scale_features=True):
-        """
-        Load prepared feature matrix and target vector
-        
-        Parameters:
-        - X: DataFrame or array with features
-        - y: Series or array with target labels
-        - scale_features: Whether to scale features (default True)
-        """
         
         print(f"Loading data...")
         
@@ -53,24 +41,19 @@ class Pipeline:
         return X, y
     
     def create_splits(self, X, y, test_size=0.2, val_size=0.15):
-        """
-        Create train/validation/test splits
-        """
         
         print(f"\n Creating splits...")
-        
-        # Split into train/temp and test
+    
         X_temp, X_test, y_temp, y_test = train_test_split(
             X, y, test_size=test_size, random_state=self.random_state, stratify=y
         )
         
-        # Split temp into train and validation
         val_ratio = val_size / (1 - test_size)
         X_train, X_val, y_train, y_val = train_test_split(
             X_temp, y_temp, test_size=val_ratio, random_state=self.random_state, stratify=y_temp
         )
         
-        # Scale features if requested
+        # Scale 
         if self.scale_features:
             print(f"Scaling features...")
             X_train = pd.DataFrame(
@@ -95,10 +78,7 @@ class Pipeline:
     
     def train_model(self, X_train, y_train, X_val, y_val, 
                    max_depth=15, min_samples_split=20, min_samples_leaf=10):
-        """
-        Train Decision Tree classifier
-        """
-        
+
         print(f"\n Training Decision Tree...")
         
         # Initialize model
@@ -278,38 +258,20 @@ class Pipeline:
         return importance_df
 
 def run_full_pipeline(X, y, scale_features=True, save_results=True, output_dir="./ml_results"):
-    """
-    Run complete ML pipeline on prepared data
-    
-    Parameters:
-    - X: Feature matrix (DataFrame or array)
-    - y: Target labels (Series or array)
-    - scale_features: Whether to scale features
-    - save_results: Whether to save results to files
-    - output_dir: Directory to save results
-    
-    Returns: Dictionary with results
-    """
-    
-    # Initialize pipeline
+
     pipeline = Pipeline()
-    
-    # Load data
+
     X, y = pipeline.load_data(X, y, scale_features=scale_features)
-    
-    # Create splits
+
     X_train, X_val, X_test, y_train, y_val, y_test = pipeline.create_splits(X, y)
-    
-    # Train model
+
     train_results = pipeline.train_model(X_train, y_train, X_val, y_val)
-    
-    # Evaluate model
+
     eval_results = pipeline.evaluate_model(X_test, y_test, save_results=save_results, output_dir=output_dir)
-    
-    # Create SHAP plots
+
     pipeline.plot_shap_summary(X_test, save_plot=save_results, output_dir=output_dir)
     
-    # Get sklearn feature importance
+    #  feature importance
     sklearn_importance = pipeline.get_feature_importance()
     
     return {
