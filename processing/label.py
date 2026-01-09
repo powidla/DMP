@@ -22,7 +22,7 @@ for fname in sorted(os.listdir(csv_dir)):
     nonzero_mask = np.any(arr != 0, axis=1)
     filtered = data[nonzero_mask].reset_index(drop=True)
 
-    # Detect category (env vs flux)
+    # env vs flux
     if "envs" in fname:
         num_cols = min(filtered.shape[1], n_env_cols)
         cols = [f"c{i+1}" for i in range(num_cols)]
