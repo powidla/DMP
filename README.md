@@ -26,7 +26,7 @@ If you find this repository usefull for your research, please cite the following
   language  = "en"
 }
 
-@misc{cherendichenko2025friendfoe,
+@misc{cherednichenko2025friendfoe,
   title={Friend or Foe}, 
   author={Oleksandr Cherednichenko and Josephine Solowiej-Wedderburn and Laura M. Carroll and Eric Libby},
   year={2025},
