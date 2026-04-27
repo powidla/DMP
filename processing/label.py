@@ -40,9 +40,4 @@ for fname in sorted(os.listdir(csv_dir)):
         filtered["label"] = 0
     else:
         filtered["label"] = np.nan
-
-    # Save (overwrite)
-    output_path = os.path.join(output_dir, fname)
-    filtered.to_csv(output_path, index=False)
-
-    print(f"Saved {output_path} | shape {filtered.shape} | label={int(filtered['label'].iloc[0]) if not filtered.empty else 'N/A'}\n")
+        
