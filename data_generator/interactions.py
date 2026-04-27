@@ -23,16 +23,7 @@ from modeling import generate_random_environment, FriendOrFoeDataCollector, test
 
 def classify_interaction_detailed(m1_change, m2_change, tolerance=1e-16):
     '''
-    Interaction classification using exact specified categories
-    
-    Parameters:
-    - m1_change: growth change for microbe 1 
-    - m2_change: growth change for microbe 2
-    - tolerance: threshold for considering change significant (default 0.001)
-    
-    Returns:
-    - interaction_type: interaction classification
-    - interaction_category: broader category for grouping
+    Interaction classification
     '''
     
     
@@ -58,24 +49,9 @@ def classify_interaction_detailed(m1_change, m2_change, tolerance=1e-16):
     return interaction_type, category
 
 class TargetedInteractionSearcher:
-    """
-    Searches for environments that produce specific microbial interactions
-    Only collects and saves data for environments with target interactions
-    Organizes output files into folders by interaction type
-    """
-    
     def __init__(self, microbe1, microbe2, target_interactions=None, 
                  max_environments_per_type=1000, interaction_tolerance=1e-16):
-        """
-        Initialize targeted searcher
-        
-        Parameters:
-        - microbe1, microbe2: loaded microbe models
-        - target_interactions: list of interaction types to search for
-        - max_environments_per_type: maximum environments to save per interaction type
-        - interaction_tolerance: threshold for interaction classification
-        """
-        
+     
         self.microbe1 = microbe1
         self.microbe2 = microbe2
         self.target_interactions = target_interactions or [
@@ -114,27 +90,6 @@ class TargetedInteractionSearcher:
     
     def search_for_target_interactions(self, max_attempts=50000, min_nutrients=200, max_nutrients=424,
                                      optimization_method='FBA', min_growth_rate=1e-16):
-        '''
-        Search for environments that produce target interactions
-        
-        Parameters:
-        - max_attempts: maximum environments to test
-        - min_nutrients, max_nutrients: nutrient range per environment
-        - optimization_method: FBA, MOMA, etc.
-        - min_growth_rate: minimum viable growth rate
-        
-        Returns:
-        - summary of found interactions
-        '''
-        
-        print(f"\nTARGETED INTERACTION SEARCH")
-        print("=" * 60)
-        print(f"Max attempts: {max_attempts:,}")
-        print(f"Optimization method: {optimization_method}")
-        print(f"Nutrient range: {min_nutrients}-{max_nutrients}")
-        print("=" * 60)
-        
-        # Setup
         num_compounds = self.microbe1["S_ext"].shape[0]
         pair_model = create_pair_model_simple(self.microbe1, self.microbe2)
         
@@ -231,20 +186,8 @@ class TargetedInteractionSearcher:
         }
     
     def create_interaction_folders(self, base_output_dir):
-        """
-        Create separate folders for each interaction type
-        
-        Parameters:
-        - base_output_dir: base directory for all output
-        
-        Returns:
-        - dictionary mapping interaction types to their folder paths
-        """
         interaction_folders = {}
-        
-        # Create base directory
         os.makedirs(base_output_dir, exist_ok=True)
-        
         # Create folders for each interaction type that has data
         for interaction_type in self.found_interactions.keys():
             if len(self.found_interactions[interaction_type]) > 0:
@@ -257,13 +200,6 @@ class TargetedInteractionSearcher:
         return interaction_folders
     
     def save_targeted_results(self, output_dir="./targeted_interactions_output"):
-        """
-        Save targeted interaction results organized into folders by interaction type
-        Creates separate folders for each interaction type
-        """
-        
-        # Create base output directory
-        os.makedirs(output_dir, exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
         model1_clean = self.microbe1['name'].replace('.xml', '').replace(' ', '_')
@@ -397,51 +333,12 @@ class TargetedInteractionSearcher:
             'folder_structure': {interaction_type: os.path.basename(folder) 
                                for interaction_type, folder in interaction_folders.items()}
         }
-        
-        master_file = os.path.join(output_dir, f"MASTER_targeted_search_summary_{model1_clean}_vs_{model2_clean}_{timestamp}.json")
-        with open(master_file, 'w') as f:
-            json.dump(convert_numpy(master_summary), f, indent=2)
-        
-        print(f"\n Files saved in organized structure:")
-        print(f" Base directory: {output_dir}")
-        print(f" Master summary: {os.path.basename(master_file)}")
-        
-        for interaction_type, folder in interaction_folders.items():
-            count = len(self.found_interactions[interaction_type])
-            print(f" {os.path.basename(folder)}/ ({count} environments)")
-            print(f"      ├── summary_{interaction_type}_*.csv")
-            print(f"      ├── environments_{interaction_type}_*.csv")
-            print(f"      └── metadata_{interaction_type}_*.json")
-        
-        return saved_files, master_summary
 
 def search_specific_interactions(model1_path, model2_path, 
                                 target_interactions=["Cooperative", "Competitive"],
                                 max_per_type=500, max_attempts=20000,
                                 optimization_method='FBA',
                                 output_dir="./targeted_interactions"):
-    '''
-    Convenience function to search for specific interactions
-    Files will be organized into separate folders by interaction type
-    
-    Parameters:
-    - model1_path, model2_path: paths to model files
-    - target_interactions: list of interaction types to find
-    - max_per_type: max environments to save per interaction type
-    - max_attempts: max environments to test
-    - optimization_method: optimization method to use
-    - output_dir: base directory for organized output folders
-    
-    Returns:
-    - search results and saved file information
-    '''
-    
-    print(f"TARGETED INTERACTION SEARCH")
-    print(f"Targets: {target_interactions}")
-    print(f"Goal: {max_per_type} environments per interaction type")
-    print(f"Output: Files will be organized by interaction type in {output_dir}")
-    
-    # Load models
     microbe1 = load_model_simple(model1_path)
     microbe2 = load_model_simple(model2_path)
     
