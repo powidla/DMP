@@ -60,15 +60,3 @@ for folder in sorted(os.listdir(root_dir)):
 # Save results
 output_dir = os.path.join(root_dir, "aggregated_csvs")
 os.makedirs(output_dir, exist_ok=True)
-
-for cat, arr_list in all_data.items():
-    if not arr_list:
-        print(f"No data found for {cat}, skipping.")
-        continue
-
-    print(f"Padding and concatenating {cat} ({len(arr_list)} arrays)...")
-    big_arr = pad_arrays(arr_list)
-
-    csv_path = os.path.join(output_dir, f"{cat}.csv")
-    pd.DataFrame(big_arr).to_csv(csv_path, index=False)
-    print(f"Saved {csv_path} with shape {big_arr.shape}")
