@@ -28,7 +28,7 @@ If you find this repository usefull for your research, please cite the following
 
 @misc{cherendichenko2025friendfoe,
   title={Friend or Foe}, 
-  author={Oleksandr Cherendichenko and Josephine Solowiej-Wedderburn and Laura M. Carroll and Eric Libby},
+  author={Oleksandr Cherednichenko and Josephine Solowiej-Wedderburn and Laura M. Carroll and Eric Libby},
   year={2025},
   eprint={2509.00123},
   archivePrefix={arXiv},
