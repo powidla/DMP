@@ -25,4 +25,4 @@ for fname in sorted(os.listdir(csv_dir)):
     filtered_path = os.path.join(output_dir, fname)
 
     filtered.to_csv(filtered_path, index=False)
-    print(f"Saved {filtered.shape[0]} non-zero rows (from {data.shape[0]}) → {filtered_path}\n")
+    
